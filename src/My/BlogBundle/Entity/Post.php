@@ -2,6 +2,7 @@
 
 namespace My\BlogBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +26,9 @@ class Post
      * @var string $title
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\MinLength(2)
+     * @Assert\MaxLength(50)
      */
     private $title;
 
@@ -32,6 +36,8 @@ class Post
      * @var string $body
      *
      * @ORM\Column(name="body", type="text")
+     * @Assert\NotBlank()
+     * @Assert\MinLength(10)
      */
     private $body;
 
@@ -53,7 +59,7 @@ class Post
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,14 +75,14 @@ class Post
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -92,14 +98,14 @@ class Post
     public function setBody($body)
     {
         $this->body = $body;
-    
+
         return $this;
     }
 
     /**
      * Get body
      *
-     * @return string 
+     * @return string
      */
     public function getBody()
     {
@@ -115,14 +121,14 @@ class Post
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -138,14 +144,14 @@ class Post
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {

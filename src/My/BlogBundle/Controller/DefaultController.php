@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
+    // 記事一覧を表示するアクション
     public function indexAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -14,6 +15,7 @@ class DefaultController extends Controller
         return $this->render('MyBlogBundle:Default:index.html.twig', array('posts' => $posts));
     }
 
+    // 記事を参照するアクション
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -21,6 +23,7 @@ class DefaultController extends Controller
         return $this->render('MyBlogBundle:Default:show.html.twig', array('post' => $post));
     }
 
+    // 記事を追加するアクション
     public function newAction()
     {
         // フォームのビルド
@@ -55,6 +58,59 @@ class DefaultController extends Controller
         // ここでは、フォームオブジェクトを描画可能な FormView オブジェクトに変換するために createView() メソッドを呼び出し、
         // その結果をテンプレートにパラメータとして引き渡しています。
         return $this->render('MyBlogBundle:Default:new.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    // 記事を削除するアクション
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $post = $em->find('MyBlogBundle:Post', $id);
+        if (!$post) {
+            throw new NotFoundHttpException('The post does not exist.');
+        }
+        $em->remove($post);
+        $em->flush();
+        return $this->redirect($this->generateUrl('blog_index'));
+    }
+
+    // 編集アクション
+    public function editAction($id)
+    {
+        // DBから取得
+        $em = $this->getDoctrine()->getEntityManager();
+        $post = $em->find('MyBlogBundle:Post', $id);
+        if (!$post) {
+            throw new NotFoundHttpException('The post does not exist.');
+        }
+
+        // フォームのビルド
+        $form = $this->createFormBuilder($post)
+            ->add('title')
+            ->add('body')
+            ->getForm();
+
+        // バリデーション
+        $request = $this->getRequest();
+        if ('POST' === $request->getMethod()) {
+            $form->bindRequest($request);
+            if ($form->isValid()) {
+                // 更新されたエンティティをデータベースに保存
+                $post = $form->getData();
+                $post->setUpdatedAt(new \DateTime());
+
+                //すでに永続化されているエンティティを EntityManager 経由で取得した場合、
+                //オブジェクトのプロパティを変更して EntityManager の flush() を実行するだけで
+                //データベースに反映されることに注意してください。persist() は不要です。
+                $em->flush();
+                return $this->redirect($this->generateUrl('blog_index'));
+            }
+        }
+
+        // 描画
+        return $this->render('MyBlogBundle:Default:edit.html.twig', array(
+            'post' => $post,
             'form' => $form->createView(),
         ));
     }

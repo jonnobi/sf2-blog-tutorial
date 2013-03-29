@@ -5,6 +5,7 @@
         <td>Id</td>
         <td>Title</td>
         <td>CreatedAt</td>
+        <td>Operation</td>
     </tr>
     {# ここから、posts配列をループして、投稿記事の情報を表示 #}
     {% for post in posts %}
@@ -12,6 +13,7 @@
         <td>{{ post.id }}</td>
         <td><a href="{{ path('blog_show', {'id':post.id}) }}">{{ post.title }}</a></td>
         <td>{{ post.createdAt|date('Y/m/d H:i') }}</td>
+        <td><a href="{{ path('blog_edit', {'id':post.id}) }}">Edit</a> <a href="{{ path('blog_delete', {'id':post.id}) }}">Delete</a></td>
     </tr>
     {% else %}
     <tr>
@@ -21,5 +23,5 @@
 </table>
 
 <div>
-<a href="{{ path('blog_new') }}">ブログ追加</a>
+<a href="{{ path('blog_new') }}">add post</a>
 </div>
