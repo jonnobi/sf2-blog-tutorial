@@ -1,3 +1,14 @@
+blog:
+    resource: "@MyBlogBundle/Resources/config/routing.yml"
+    prefix:   /blog
+
+# ルーティング名 my_blog → blog に変更。
+# prefix / → /blog に変更。
+
+#my_blog:
+#    resource: "@MyBlogBundle/Resources/config/routing.yml"
+#    prefix:   /
+
 # Internal routing configuration to handle ESI
 #_internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
