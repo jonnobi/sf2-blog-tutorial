@@ -3,6 +3,7 @@
 namespace My\BlogBundle\Controller;
 
 use My\BlogBundle\Entity\Post;
+use My\BlogBundle\Form\PostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
@@ -27,11 +28,12 @@ class DefaultController extends Controller
     public function newAction()
     {
         // フォームのビルド
-        // - FormBuilder を用いてコントローラのアクション内で簡単にフォームオブジェクトを作成できる。
-        $form = $this->createFormBuilder(new Post())  // ここでPostクラスを使うため、ファイルの先頭あたりにuseを追加していることに注意
-            ->add('title')
-            ->add('body')
-            ->getForm();
+//        $form = $this->createFormBuilder(new Post())  // ここでPostクラスを使うため、ファイルの先頭あたりにuseを追加していることに注意
+//            ->add('title')
+//            ->add('body')
+//            ->getForm();
+        // 直接フォーム生成している部分をフォームクラス経由に変更
+        $form = $this->createForm(new PostType(), new Post());
 
         // バリデーション
         $request = $this->getRequest();
@@ -92,10 +94,11 @@ class DefaultController extends Controller
         }
 
         // フォームのビルド
-        $form = $this->createFormBuilder($post)
-            ->add('title')
-            ->add('body')
-            ->getForm();
+//        $form = $this->createFormBuilder($post)
+//            ->add('title')
+//            ->add('body')
+//            ->getForm();
+        $form = $this->createForm(new PostType(), $post);
 
         // バリデーション
         $request = $this->getRequest();
