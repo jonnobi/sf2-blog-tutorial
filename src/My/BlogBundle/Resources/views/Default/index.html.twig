@@ -1,4 +1,15 @@
 {# src/My/BlogBundle/Resources/views/Default/index.html.twig #}
+{% extends 'MyBlogBundle::layout.html.twig' %}
+
+{% block body %}
+
+{# フラッシュメッセージを表示 #}
+{% if app.session.hasFlash('my_blog') %}
+<div style="background-color:yellow;color:red;font-weight:bold;">
+    {{ app.session.flash('my_blog') }}
+</div>
+{% endif %}
+
 <h1>Blog posts</h1>
 <table>
     <tr>
@@ -24,4 +35,5 @@
 
 <div>
 <a href="{{ path('blog_new') }}">add post</a>
-</div>
+</div
+{% endblock %}

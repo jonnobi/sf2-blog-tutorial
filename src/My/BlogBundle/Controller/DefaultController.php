@@ -40,8 +40,10 @@ class DefaultController extends Controller
             if ($form->isValid()) {
                 // エンティティを永続化
                 $post = $form->getData();
-                $post->setCreatedAt(new \DateTime());
-                $post->setUpdatedAt(new \DateTime());
+
+                // ライフサイクル・コールバックにて更新するのでコメント化。
+                //$post->setCreatedAt(new \DateTime());
+                //$post->setUpdatedAt(new \DateTime());
 
                 // フォームから取り出したオブジェクトをデータベースに登録するには、
                 // persist() メソッドで EntityManager に対して永続化指示を行った後、
@@ -49,6 +51,8 @@ class DefaultController extends Controller
                 $em = $this->getDoctrine()->getEntityManager();
                 $em->persist($post);
                 $em->flush();
+                // フラッシュメッセージを登録する。
+                $this->get('session')->setFlash('my_blog', '記事を追加しました');
                 return $this->redirect($this->generateUrl('blog_index'));
             }
         }
@@ -72,6 +76,8 @@ class DefaultController extends Controller
         }
         $em->remove($post);
         $em->flush();
+        // フラッシュメッセージを登録する。
+        $this->get('session')->setFlash('my_blog', '記事を削除しました');
         return $this->redirect($this->generateUrl('blog_index'));
     }
 
@@ -98,12 +104,16 @@ class DefaultController extends Controller
             if ($form->isValid()) {
                 // 更新されたエンティティをデータベースに保存
                 $post = $form->getData();
-                $post->setUpdatedAt(new \DateTime());
+
+                // ライフサイクル・コールバックにて更新するのでコメント化。
+                //$post->setUpdatedAt(new \DateTime());
 
                 //すでに永続化されているエンティティを EntityManager 経由で取得した場合、
                 //オブジェクトのプロパティを変更して EntityManager の flush() を実行するだけで
                 //データベースに反映されることに注意してください。persist() は不要です。
                 $em->flush();
+                // フラッシュメッセージを登録する。
+                $this->get('session')->setFlash('my_blog', '記事を編集しました');
                 return $this->redirect($this->generateUrl('blog_index'));
             }
         }
